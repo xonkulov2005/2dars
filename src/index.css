@@ -30,6 +30,11 @@ body {
   min-height: 100vh;
   align-items: center;
   justify-content: center;
+  background-image: url(../public/istockphoto-1375889454-1024x1024.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  object-fit: contain;
+  overflow: hidden;
 }
 
 h1 {
@@ -80,7 +85,7 @@ li {
   padding: 5px 10px;
   margin: 10px;
   text-align: center;
-  background-color: rgba(222, 163, 1, 0.337);
+  background-color: white;
   border: solid 2px rgb(6, 101, 97);
   display: flex;
   align-items: center;
