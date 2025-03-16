@@ -1,42 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import TitlesList from "./components/TitlesList";
+import Form from "./components/Form";
+
+const initalValue = () => {
+  return JSON.parse(localStorage.getItem("todos")) || [];
+};
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [text, setText] = useState("");
+  const [error, setError] = useState(false);
+  const [titles, setTitles] = useState(initalValue);
 
-  const addTask = () => {
-    if (inputValue.trim() !== "") {
-      setTasks([...tasks, inputValue]);
-      setInputValue("");
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(false);
+        console.log(1);
+      }, 5000);
+    }
+    if (text) {
+      setError(false);
+    }
+  }, [error, text, titles]);
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(titles));
+  }, [titles]);
+  const deleteTitle = (id) => {
+    const filteredTitles = titles.filter((t) => t.id !== id);
+    setTitles(filteredTitles);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (text.length == 0) {
+      setError("Write Something Please (");
+    } else if (text.length < 4) {
+      setError("Write more than 4 character");
+    } else {
+      setTitles([...titles, { title: text, id: Math.random() }]);
+      setText("");
+      setError(false);
     }
   };
 
-  const removeTask = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
-
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Todo List</h1>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="matn kiriting..."
+    <div>
+      <h1>Titles</h1>
+      <Form
+        setText={setText}
+        handleSubmit={handleSubmit}
+        text={text}
+        error={error}
       />
-      <button onClick={addTask}>Add</button>
-
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {tasks.map((task, index) => (
-          <li key={index}>
-            {task}{" "}
-            <button
-              onClick={() => removeTask(index)}
-            >
-              delete
-            </button>
-          </li>
-        ))}
+      <ul>
+        {!titles.length && <h2>You Don't Have Any Titles</h2>}
+        {titles.length > 0 && (
+          <TitlesList titles={titles} deleteTitle={deleteTitle} />
+        )}
       </ul>
     </div>
   );
