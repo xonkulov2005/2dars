@@ -45,7 +45,7 @@ function App() {
 
   return (
     <div>
-      <h1>Titles</h1>
+      <h1>Todo List</h1>
       <Form
         setText={setText}
         handleSubmit={handleSubmit}
